@@ -1,10 +1,12 @@
 {
   "name": "Mein Kochbuch",
   "short_name": "Kochbuch",
-  "description": "Persönliches digitales Kochbuch mit lokaler Speicherung.",
+  "description": "Persönliches digitales Kochbuch mit Rezepten, Favoriten und Einkaufsliste.",
+  "lang": "de",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#f6f2ea",
   "theme_color": "#b84f35",
   "icons": [
