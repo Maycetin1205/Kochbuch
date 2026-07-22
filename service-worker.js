@@ -1,10 +1,11 @@
-const CACHE='kochbuch-v8-klare-schritte';
+const CACHE='kochbuch-v9-bereinigt';
 const ASSETS=[
   './',
   './index.html',
   './styles.css',
   './portions.css',
   './default-recipes.js',
+  './recipe-cleanup.js',
   './app-core.js',
   './app-views.js',
   './app-actions.js',
