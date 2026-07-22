@@ -1,12 +1,14 @@
-const CACHE='kochbuch-v4';
+const CACHE='kochbuch-v5-portions';
 const ASSETS=[
   './',
   './index.html',
   './styles.css',
+  './portions.css',
   './default-recipes.js',
   './app-core.js',
   './app-views.js',
   './app-actions.js',
+  './app-portions.js',
   './manifest.webmanifest',
   './icon-192.svg',
   './icon-512.svg'
