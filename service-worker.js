@@ -1,4 +1,4 @@
-const CACHE='kochbuch-v6-portions-inline';
+const CACHE='kochbuch-v7-ohne-einkaufsliste';
 const ASSETS=[
   './',
   './index.html',
