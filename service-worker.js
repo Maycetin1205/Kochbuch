@@ -1,4 +1,4 @@
-const CACHE='kochbuch-v9-bereinigt';
+const CACHE='kochbuch-v10-sauber';
 const ASSETS=[
   './',
   './index.html',
