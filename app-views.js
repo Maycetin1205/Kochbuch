@@ -1,5 +1,5 @@
 function recipeCard(r){
-  return `<article class="card"><div class="card-img">${imgHtml(r.bild,r.titel)}<span class="badge">${esc(r.kategorie)}</span><button class="heart ${isFavorite(r.id)?'active':''}" data-favorite="${esc(r.id)}" aria-label="Favorit">${isFavorite(r.id)?'♥':'♡'}</button></div><div class="card-body"><h3>${esc(r.titel)}</h3><div class="meta">${r.schwierigkeit?`<span>${esc(r.schwierigkeit)}</span>`:''}${r.zeitGesamt?`<span>· ${esc(r.zeitGesamt)}</span>`:''}${r.portionen?`<span>· ${esc(r.portionen)} Portionen</span>`:''}</div><p>${esc((r.einleitung||'').slice(0,135))}${(r.einleitung||'').length>135?'…':''}</p><div class="card-actions"><button class="btn primary" data-open="${esc(r.id)}">Öffnen</button></div></div></article>`;
+  return `<article class="card"><div class="card-img">${imgHtml(r.bild,r.titel)}<span class="badge">${esc(r.kategorie)}</span><button class="heart ${isFavorite(r.id)?'active':''}" data-favorite="${esc(r.id)}" aria-label="Favorit">${isFavorite(r.id)?'♥':'♡'}</button></div><div class="card-body"><h3>${esc(r.titel)}</h3><div class="meta">${r.schwierigkeit?`<span>${esc(r.schwierigkeit)}</span>`:''}${r.zeitGesamt?`<span>· ${esc(r.zeitGesamt)}</span>`:''}${r.portionen?`<span>· ${esc(r.portionen)} Portionen</span>`:''}</div><div class="card-actions"><button class="btn primary" data-open="${esc(r.id)}">Öffnen</button></div></div></article>`;
 }
 
 function recipesView(favoritesOnly=false){
@@ -10,10 +10,8 @@ function recipesView(favoritesOnly=false){
 }
 
 function categoriesView(){
-  const counts={};
-  state.recipes.forEach(r=>counts[r.kategorie]=(counts[r.kategorie]||0)+1);
-  const entries=Object.entries(counts).sort((a,b)=>a[0].localeCompare(b[0],'de'));
-  return `<div class="category-grid">${entries.map(([name,count])=>`<button class="category-card" data-category="${esc(name)}"><strong>${esc(name)}</strong><span>${count}</span></button>`).join('')}</div>`;
+  const categories=[...new Set(state.recipes.map(r=>r.kategorie))].sort((a,b)=>a.localeCompare(b,'de'));
+  return `<div class="category-grid">${categories.map(name=>`<button class="category-card" data-category="${esc(name)}"><strong>${esc(name)}</strong></button>`).join('')}</div>`;
 }
 
 function aiPrompt(source=''){
@@ -35,10 +33,10 @@ function detailView(){
   const r=current();
   if(!r)return recipesView();
   const checked=state.checkedIngredients[r.id]||{};
-  return `<div class="toolbar"><button class="btn ghost" data-view="recipes">← Rezepte</button></div><section class="detail-head"><div class="detail-photo">${imgHtml(r.bild,r.titel)}</div><div class="detail-info"><div class="eyebrow">${esc(r.kategorie)}</div><h1>${esc(r.titel)}</h1><div class="meta">${[r.schwierigkeit,r.zeitGesamt,r.portionen?`${r.portionen} Portionen`:'' ].filter(Boolean).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}</div>${r.quelle?`<a class="source-link" href="${esc(r.quelle)}" target="_blank" rel="noopener">Quelle öffnen</a>`:''}<p class="intro">${esc(r.einleitung)}</p><div class="card-actions detail-actions"><button class="btn primary" id="startCook">Kochmodus</button><button class="btn" id="detailFavorite">${isFavorite(r.id)?'♥ Favorit':'♡ Favorit'}</button><label class="btn file-label">${r.bild?'Bild ändern':'Bild wählen'}<input id="detailImageFile" type="file" accept="image/*"></label>${r.bild?'<button class="btn" id="removeImage">Bild entfernen</button>':''}<button class="btn danger" id="deleteRecipe">Löschen</button></div></div></section><section class="recipe-layout"><aside class="ingredients"><h2>Zutaten</h2>${(r.zutaten||[]).map((z,i)=>`<label class="ingredient ${checked[i]?'checked':''}"><input type="checkbox" data-ing="${i}" ${checked[i]?'checked':''}><span>${esc(ingredientText(z))}${z?.optional?' <small>(optional)</small>':''}</span></label>`).join('')||'<p>Keine Zutaten.</p>'}</aside><article class="steps"><h2>Zubereitung</h2>${r.schritte.map(stepHtml).join('')}</article></section>`;
+  return `<div class="toolbar"><button class="btn ghost" data-view="recipes">← Rezepte</button></div><section class="detail-head"><div class="detail-photo">${imgHtml(r.bild,r.titel)}</div><div class="detail-info"><div class="eyebrow">${esc(r.kategorie)}</div><h1>${esc(r.titel)}</h1><div class="meta">${[r.schwierigkeit,r.zeitGesamt,r.portionen?`${r.portionen} Portionen`:'' ].filter(Boolean).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}</div>${r.quelle?`<a class="source-link" href="${esc(r.quelle)}" target="_blank" rel="noopener">Quelle öffnen</a>`:''}<div class="card-actions detail-actions"><button class="btn primary" id="startCook">Kochmodus</button><button class="btn" id="detailFavorite">${isFavorite(r.id)?'♥ Favorit':'♡ Favorit'}</button><label class="btn file-label">${r.bild?'Bild ändern':'Bild wählen'}<input id="detailImageFile" type="file" accept="image/*"></label>${r.bild?'<button class="btn" id="removeImage">Bild entfernen</button>':''}<button class="btn danger" id="deleteRecipe">Löschen</button></div></div></section><section class="recipe-layout"><aside class="ingredients"><h2>Zutaten</h2>${(r.zutaten||[]).map((z,i)=>`<label class="ingredient ${checked[i]?'checked':''}"><input type="checkbox" data-ing="${i}" ${checked[i]?'checked':''}><span>${esc(ingredientText(z))}${z?.optional?' <small>(optional)</small>':''}</span></label>`).join('')||'<p>Keine Zutaten.</p>'}</aside><article class="steps"><h2>Zubereitung</h2>${r.schritte.map(stepHtml).join('')}</article></section>`;
 }
 
-function stepTip(step){return String(step?.tipp||step?.tip||step?.fertigWenn||'').trim()}
+function stepTip(step){return String(step?.tipp||step?.tip||'').trim()}
 function stepHtml(s,i){
   const tip=stepTip(s);
   return `<section class="step"><div><span class="step-num">${i+1}</span><h3>${esc(s.titel||`Schritt ${i+1}`)}</h3></div>${s.startwert?`<div class="meta" style="margin-top:8px"><span class="badge">${esc(s.startwert)}</span></div>`:''}<p class="action">${esc(s.aktion)}</p>${tip?`<div class="step-tip"><strong>Tipp:</strong> ${esc(tip)}</div>`:''}</section>`;
