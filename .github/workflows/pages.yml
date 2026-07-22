@@ -23,6 +23,21 @@ jobs:
     steps:
       - name: Repository laden
         uses: actions/checkout@v6
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript prüfen
+        run: |
+          node --check default-recipes.js
+          node --check recipe-cleanup.js
+          node --check app-core.js
+          node --check app-views.js
+          node --check app-actions.js
+          node --check app-portions.js
+          node --check service-worker.js
+      - name: Rezepte prüfen
+        run: node validate-recipes.js
       - name: GitHub Pages einrichten
         uses: actions/configure-pages@v5
       - name: Statische Dateien hochladen
